@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelian Tiket Pesawat - Situs Resmi Simulasi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .flight-option {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flight-option.selected {
+            border-color: #007bff;
+            background-color: #e7f3ff;
+        }
+        .receipt {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .receipt h3 {
+            color: #28a745;
+        }
+        .receipt-item {
+            margin-bottom: 10px;
+        }
+        .btn-next {
+            background-color: #007bff;
+        }
+        .btn-next:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NzrTicket - Pembelian Tiket Pesawat</h1>
+        <p>Situs Resmi Simulasi Pemesanan Tiket</p>
+    </div>
+
+    <div class="container">
+        <!-- Section 1: Pencarian Penerbangan -->
+        <div id="searchSection" class="section active">
+            <h2>Cari Penerbangan</h2>
+            <form id="searchForm">
+                <div>
+                    <label for="departure">Asal:</label>
+                    <select id="departure" required>
+                        <option value="">Pilih Kota Asal</option>
+                        <option value="Jakarta">Jakarta (CGK)</option>
+                        <option value="Surabaya">Surabaya (SUB)</option>
+                        <option value="Bali">Denpasar, Bali (DPS)</option>
+                        <option value="Medan">Medan (KNO)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="destination">Tujuan:</label>
+                    <select id="destination" required>
+                        <option value="">Pilih Kota Tujuan</option>
+                        <option value="Jakarta">Jakarta (CGK)</option>
+                        <option value="Surabaya">Surabaya (SUB)</option>
+                        <option value="Bali">Denpasar, Bali (DPS)</option>
+                        <option value="Medan">Medan (KNO)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="departureDate">Tanggal Keberangkatan:</label>
+                    <input type="date" id="departureDate" required>
+                </div>
+                <div>
+                    <label for="returnDate">Tanggal Kepulangan (Opsional):</label>
+                    <input type="date" id="returnDate">
+                </div>
+                <div>
+                    <label for="passengers">Jumlah Penumpang:</label>
+                    <select id="passengers" required>
+                        <option value="1">1 Dewasa</option>
+                        <option value="2">2 Dewasa</option>
+                        <option value="3">3 Dewasa</option>
+                        <option value="4">4 Dewasa</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="class">Kelas:</label>
+                    <select id="class" required>
+                        <option value="economy">Ekonomi</option>
+                        <option value="business">Bisnis</option>
+                    </select>
+                </div>
+                <div class="full-width">
+                    <button type="button" onclick="searchFlights()">Cari Penerbangan</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Section 2: Hasil Pencarian dan Pilih Penerbangan -->
+        <div id="resultsSection" class="section">
+            <h2>Hasil Pencarian Penerbangan</h2>
+            <div id="flightResults">
+                <!-- Opsi penerbangan akan ditambahkan secara dinamis -->
+            </div>
+            <button class="btn-next" onclick="nextToDetails()">Lanjut ke Detail Penumpang</button>
+        </div>
+
+        <!-- Section 3: Detail Penumpang -->
+        <div id="detailsSection" class="section">
+            <h2>Detail Penumpang</h2>
+            <form id="passengerForm">
+                <div>
+                    <label for="name">Nama Lengkap:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div>
+                    <label for="phone">Nomor Telepon:</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div>
+                    <label for="idNumber">Nomor Identitas (KTP/Paspor):</label>
+                    <input type="text" id="idNumber" required>
+                </div>
+                <div class="full-width">
+                    <button type="button" onclick="nextToPayment()">Lanjut ke Pembayaran</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Section 4: Simulasi Pembayaran -->
+        <div id="paymentSection" class="section">
+            <h2>Pembayaran</h2>
+            <p>Total Pembayaran: IDR <span id="totalPrice">0</span></p>
+            <form id="paymentForm">
+                <div>
+                    <label for="cardNumber">Nomor Kartu Kredit:</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div>
+                    <label for="expiry">Tanggal Kadaluarsa (MM/YY):</label>
+                    <input type="text" id="expiry" placeholder="12/25" required>
+                </div>
+                <div>
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" placeholder="123" required>
+                </div>
+                <div class="full-width">
+                    <button type="button" onclick="confirmPayment()">Konfirmasi Pembayaran</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Section 5: Struk dan Konfirmasi -->
+        <div id="receiptSection" class="section">
+            <h2>Konfirmasi Pembelian</h2>
+            <div class="receipt">
+                <h3>Struk Tiket Pesawat</h3>
+                <div class="receipt-item"><strong>Kode Booking:</strong> <span id="bookingCode"></span></div>
+                <div class="receipt-item"><strong>Nama Penumpang:</strong> <span id="receiptName"></span></div>
+                <div class="receipt-item"><strong>Asal:</strong> <span id="receiptDeparture"></span></div>
+                <div class="receipt-item"><strong>Tujuan:</strong> <span id="receiptDestination"></span></div>
+                <div class="receipt-item"><strong>Tanggal Keberangkatan:</strong> <span id="receiptDate"></span></div>
+                <div class="receipt-item"><strong>Jadwal:</strong> <span id="receiptSchedule"></span></div>
+                <div class="receipt-item"><strong>Kelas:</strong> <span id="receiptClass"></span></div>
+                <div class="receipt-item"><strong>Nomor Kursi:</strong> <span id="receiptSeat"></span></div>
+                <div class="receipt-item"><strong>Harga:</strong> IDR <span id="receiptPrice"></span></div>
+                <div class="receipt-item"><strong>Status:</strong> Pembayaran Berhasil! Tiket telah dikirim ke email Anda.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFlight = null;
+
+        function searchFlights() {
+            const departure = document.getElementById('departure').value;
+            const destination = document.getElementById('destination').value;
+            const date = document.getElementById('departureDate').value;
+            const passengers = document.getElementById('passengers').value;
+            const flightClass = document.getElementById('class').value;
+
+            if (!departure || !destination || !date) {
+                alert('Harap lengkapi semua field pencarian!');
+                return;
+            }
+
+            // Simulasi hasil pencarian
+            const resultsDiv = document.getElementById('flightResults');
+            resultsDiv.innerHTML = `
+                <div class="flight-option" onclick="selectFlight('08:00 - 10:00', '500000', '1A')">
+                    <div>
+                        <strong>${departure} → ${destination}</strong><br>
+                        Tanggal: ${date}<br>
+                        Jadwal: 08:00 - 10:00<br>
+                        Kelas: ${flightClass.charAt(0).toUpperCase() + flightClass.slice(1)}<br>
+                        Kursi: 1A
+                    </div>
+                    <div>IDR 500,000</div>
+                </div>
+                <div class="flight-option" onclick="selectFlight('12:00 - 14:00', '600000', '2B')">
+                    <div>
+                        <strong>${departure} → ${destination}</strong><br>
+                        Tanggal: ${date}<br>
+                        Jadwal: 12:00 - 14:00<br>
+                        Kelas: ${flightClass.charAt(0).toUpperCase() + flightClass.slice(1)}<br>
+                        Kursi: 2B
+                    </div>
+                    <div>IDR 600,000</div>
+                </div>
+            `;
+
+            document.getElementById('searchSection').classList.remove('active');
+            document.getElementById('resultsSection').classList.add('active');
+        }
+
+        function selectFlight(schedule, price, seat) {
+            selectedFlight = { schedule, price, seat };
+            document.querySelectorAll('.flight-option').forEach(opt => opt.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+
+        function nextToDetails() {
+            if (!selectedFlight) {
+                alert('Pilih penerbangan terlebih dahulu!');
+                return;
+            }
+            document.getElementById('resultsSection').classList.remove('active');
+            document.getElementById('detailsSection').classList.add('active');
+        }
+
+        function nextToPayment() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const idNumber = document.getElementById('idNumber').value;
+
+            if (!name || !email || !phone || !idNumber) {
+                alert('Harap lengkapi detail penumpang!');
+                return;
+            }
+
+            document.getElementById('totalPrice').textContent = selectedFlight.price;
+            document.getElementById('detailsSection').classList.remove('active');
+            document.getElementById('paymentSection').classList.add('active');
+        }
+
+        function confirmPayment() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+
+            if (!cardNumber || !expiry || !cvv) {
+                alert('Harap lengkapi detail pembayaran!');
+                return;
+            }
+
+            // Simulasi konfirmasi
+            const bookingCode = 'BK' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('bookingCode').textContent = bookingCode;
+            document.getElementById('receiptName').textContent = document.getElementById('name').value;
+            document.getElementById('receiptDeparture').textContent = document.getElementById('departure').value;
+            document.getElementById('receiptDestination').textContent = document.getElementById('destination').value;
+            document.getElementById('receiptDate').textContent = document.getElementById('departureDate').value;
+            document.getElementById('receiptSchedule').textContent = selectedFlight.schedule;
+            document.getElementById('receiptClass').textContent = document.getElementById('class').value.charAt(0).toUpperCase() + document.getElementById('class').value.slice(1);
+            document.getElementById('receiptSeat').textContent = selectedFlight.seat;
+            document.getElementById('receiptPrice').textContent = selectedFlight.price;
+
+            document.getElementById('paymentSection').classList.remove('active');
+            document.getElementById('receiptSection').classList.add('active');
+        }
+    </script>
+</body>
+</html>
